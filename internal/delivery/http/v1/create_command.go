@@ -22,7 +22,7 @@ func (h *Handler) CreateCommand(c *gin.Context) {
 		return
 	}
 
-	command, err := h.service.CreateCommand(c, inp)
+	command, err := h.Service.CreateCommand(c, &inp)
 	if err != nil {
 		errorResponse(c, http.StatusInternalServerError, err)
 		return

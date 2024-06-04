@@ -14,6 +14,7 @@ import (
 	v1 "github.com/zsandibe/command-runner-service/internal/delivery/http/v1"
 	"github.com/zsandibe/command-runner-service/internal/delivery/server"
 	"github.com/zsandibe/command-runner-service/internal/repository"
+	"github.com/zsandibe/command-runner-service/internal/repository/cache"
 	"github.com/zsandibe/command-runner-service/internal/service"
 	"github.com/zsandibe/command-runner-service/internal/storage"
 	logger "github.com/zsandibe/command-runner-service/pkg"
@@ -40,10 +41,17 @@ func Start() error {
 	repository := repository.NewRepository(db.DB)
 	logger.Info("Repository loaded successfully")
 
-	service := service.NewService(repository)
+	scriptsCache := cache.NewCache()
+	execCmdCache := cache.NewCache()
+
+	service := service.NewService(repository.Command, scriptsCache, execCmdCache)
 	logger.Info("Service loaded successfully")
 
-	delivery := v1.NewHandler(*service)
+	defer func() {
+		service.StopRunner()
+	}()
+
+	delivery := v1.NewHandler(service)
 	logger.Info("Delivery loaded successfully")
 
 	server := server.NewServer(cfg, delivery.Routes())

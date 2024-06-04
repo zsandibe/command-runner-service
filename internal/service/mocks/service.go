@@ -192,10 +192,10 @@ func (mr *MockCacheMockRecorder) GetAllKeys() *gomock.Call {
 }
 
 // GetLen mocks base method.
-func (m *MockCache) GetLen() (int64, error) {
+func (m *MockCache) GetLen() (int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLen")
-	ret0, _ := ret[0].(int64)
+	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

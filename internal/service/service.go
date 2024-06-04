@@ -24,7 +24,7 @@ type Cache interface {
 	Get(key int64) (any, error)
 	GetAllKeys() ([]int64, error)
 	Delete(key int64) error
-	GetLen() (int64, error)
+	GetLen() (int, error)
 }
 
 type Service struct {
